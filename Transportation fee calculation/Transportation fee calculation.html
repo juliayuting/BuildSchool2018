@@ -1,0 +1,155 @@
+<html>
+
+<head>
+    <title>Googole Map Distance</title>
+    <style>
+        .mapstyle {
+            width: 700px;
+            height: 500px;
+            float: left;
+        }
+
+        /* .directionstyle {
+            width: 400px;
+            height: 400px;
+            float: right;
+        } */
+    </style>
+</head>
+
+<body>
+
+    <div id="map" class="mapstyle"></div>
+    <!-- <div id="direction" class="directionstyle" style="margin-top:-450px"></div> -->
+    <div class="one" style="clear:both;margin-top:600px;">
+        1 . DRIVING Distance：
+        <span id="totalDistanceText2"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Time：
+        <span id="totalTimeText2"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Section:
+        <span id="totalSections2"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Expense：
+        <span id="totalExpense2"></span>
+    </div>
+    <div style="clear:both;">
+        2 . TAXI Distance：
+        <span id="totalDistanceText1"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Time：
+        <span id="totalTimeText1"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Section:
+        <span id="totalSections1"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Expense：
+        <span id="totalExpense1"></span>
+    </div>
+    <div style="clear:both;">
+        3 . TRANSIT Distance：
+        <span id="totalDistanceText3"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Time：
+        <span id="totalTimeText3"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Section:
+        <span id="totalSections3"></span>&nbsp;&nbsp;, &nbsp;&nbsp;Expense：
+        <span id="totalExpense3"></span>
+    </div>
+
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkNAdpraht6uyD0Wc6-fy96eRntXahUgQ &callback=initMap" async
+        defer></script>
+
+    <script type="text/javascript">
+
+        var map;
+        var marker = null;
+        var center = { lat: 24.7571075, lng: 120.952429 };
+        var point1 = null;
+        var point2 = null;
+        var directionsService = null;
+        var directionsDisplay = null;
+        window.onload = function () {
+            map = new google.maps.Map(
+                document.getElementById('map'), {
+                    center: center,
+                    zoom: 15
+                });
+            directionsService = new google.maps.DirectionsService();
+            directionsDisplay = new google.maps.DirectionsRenderer();
+            directionsDisplay.setMap(map);
+            //directionsDisplay.setPanel(document.getElementById('direction')); //顯示路段
+
+            map.addListener("click", function (e) {
+
+                if (point1 != null && point2 != null) {
+                    point1 = null;
+                    point2 = null;
+                }
+
+                if (point1 == null) {
+                    point1 = e.latLng.lat() + ',' + e.latLng.lng();
+                    return;
+                }
+                if (point2 == null) {
+                    point2 = e.latLng.lat() + ',' + e.latLng.lng();
+
+                }
+
+                console.log(point1);
+                console.log(point2);
+
+                directionsService.route({
+                    origin: point1,
+                    destination: point2,
+                    travelMode: 'DRIVING'
+                }, function (response, status) {
+                    if (status === 'OK') {
+                        directionsDisplay.setDirections(response);
+                        console.log(response);
+                        var leg = response.routes[0].legs[0];
+                        var step = response.routes[0].legs[0].steps;
+                        var highwaypay = 0;
+                        for (var i = 0; i < step.length; i++) {
+                            if (step[i].instructions.match("收費路段") != null) {
+                                highwaypay += step[i].distance.value / 1000;
+                            }
+                            else {
+                                highwaypay += 0;
+                            }
+                        }
+                        console.log(highwaypay);
+                        document.getElementById("totalDistanceText2").innerText = leg.distance.text;
+                        document.getElementById("totalTimeText2").innerText = leg.duration.text;
+                        document.getElementById("totalSections2").innerText = leg.steps.length;
+                        document.getElementById("totalDistanceText1").innerText = leg.distance.text;
+                        document.getElementById("totalTimeText1").innerText = leg.duration.text;
+                        document.getElementById("totalSections1").innerText = leg.steps.length;
+                        document.getElementById("totalExpense2").innerText = ((leg.distance.value / 1000 * 5) + (highwaypay * 1.2)).toFixed(2) + "元";
+                        if ((leg.distance.value / 1000) < 1.5) {
+                            document.getElementById("totalExpense1").innerText = (85 + (highwaypay * 1.2)).toFixed(2) + "元";
+                        }
+                        else if ((leg.distance.value / 1000) >= 1.5) {
+                            document.getElementById("totalExpense1").innerText = (85 + (((leg.distance.value / 250) - 6) * 5) + (highwaypay * 1.2)).toFixed(2) + "元";
+                        }
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+                directionsService.route({
+                    origin: point1,
+                    destination: point2,
+                    travelMode: 'TRANSIT'
+                }, function (response, status) {
+                    if (status === 'OK') {
+                        directionsDisplay.setDirections(response);
+                        console.log(response);
+                        var leg = response.routes[0].legs[0];
+                        document.getElementById("totalDistanceText3").innerText = leg.distance.text;
+                        document.getElementById("totalTimeText3").innerText = leg.duration.text;
+                        document.getElementById("totalSections3").innerText = leg.steps.length;
+                        if (response.routes[0].fare != null) {
+                            document.getElementById("totalExpense3").innerText = response.routes[0].fare.value + " 元";
+                        }
+                        else {
+                            document.getElementById("totalExpense3").innerText = "0 元";
+                        }
+                    } else {
+                        window.alert('Directions request failed due to ' + status);
+                    }
+                });
+            });
+
+        }
+
+    </script>
+</body>
+
+</html>

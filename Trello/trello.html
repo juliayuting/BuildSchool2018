@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Build School Trello</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <style>
+        body {
+            font-family: "微軟正黑體";
+        }
+
+        strong {
+            font-weight: normal;
+            color: mediumblue;
+        }
+
+        .col-md-4 button {
+            width: 150px;
+            text-align: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card" style="width:18rem;height:7rem;">
+        <div class="card-body">
+            <h5 class="card-title">這是可愛!?的Bootstrap練習作業!</h5>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modelId" style="width:100%;">
+                新增一張卡片
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="width:35em;">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="modelTitleId">Bootstrap 作業練習</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5>
+                                        <i class="fa fa-window-maximize" aria-hidden="true"></i> Bootstrap
+                                        <p style="font-size:14px; padding-left:24px; margin-top:4px;">位於列表
+                                            <strong>
+                                                <u>練習中/作業中</u>
+                                            </strong>
+                                        </p>
+                                        <p style="font-size:14px; padding-left:24px;">
+                                            <i class="fa fa-align-left" aria-hidden="true"></i>
+                                            <u>編輯敘述...</u>
+                                        </p>
+                                        </p>
+                                    </h5>
+                                    <h6 style="margin-left:6px;">
+                                        <i class="fa fa-paperclip" aria-hidden="true"></i> 附件</h6>
+                                    <div class="row" style="margin-left:12px;">
+                                        <div class="col-4">
+                                            <img src="../2018_3_23/imges/trello.PNG" width="110px";height="auto";>
+                                        </div>
+                                        <div class="col-4">
+                                            123
+                                        </div>
+                                    </div>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">儲存</button>&times;
+                                    </div>
+                                    <h5>新增評論</h5>
+                                    <textarea style="height:6rem; width:22rem;"></textarea>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">儲存</button>
+                                    </div>
+                                    <br/>
+                                    <h5>活動</h5>
+                                    <h5>XXX再次編輯的這張卡片</h5>
+                                    <h5>XXX編輯了這張卡片</h5>
+                                    <h5>XXX新增的這張卡片</h5>
+                                </div>
+                                <div class="col-md-4" style="margin-top:5px; margin-top:4em;">
+                                    <h6>新增</h6>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-user-o" aria-hidden="true"></i> 成員</button>
+                                    </div>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-tags" aria-hidden="true"></i> 標籤</button>
+                                    </div>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-check-square-o" aria-hidden="true"></i> 待辦清單</button>
+                                    </div>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i> 到期日</button>
+                                    </div>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i> 附件</button>
+                                    </div>
+                                    <h5>強化功能</h5>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-cloud-upload" aria-hidden="true"></i> Google 雲端硬碟</button>
+                                    </div>
+                                    <h5>動作</h5>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-long-arrow-right" aria-hidden="true"></i> 移動</button>
+                                    </div>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-clipboard" aria-hidden="true"></i> 複製</button>
+                                    </div>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-eye" aria-hidden="true"></i> 立即觀看</button>
+                                    </div>
+                                    <hr>
+                                    <div style="margin:3px;">
+                                        <button type="button" class="btn btn-primary btn-sm">
+                                            <i class="fa fa-archive" aria-hidden="true"></i> 封存</button>
+                                    </div>
+                                    <div>
+                                        <a href="#" style="color:lightslategrey;">
+                                            <u>分享及其他...</u>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

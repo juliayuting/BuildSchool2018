@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>旅遊規劃</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div id="map" style="width:700px;height:700px;"></div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDkNAdpraht6uyD0Wc6-fy96eRntXahUgQ &callback=initMap" async
+        defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var map;
+        var marker = null;
+        var center = { lat: 24.7571075, lng: 120.952429 };
+        var routes = [];
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        var request = new XMLHttpRequest();
+        var request1 = new XMLHttpRequest();
+        var request2 = new XMLHttpRequest();
+        var geocodingAPIRequest = new XMLHttpRequest();
+        request.open("GET", "http://opendata.hccg.gov.tw/dataset/39ee314b-7ce7-4265-a6b5-b57f42392da8/resource/6a3a5f61-5383-419d-a94c-df710071a51e/download/20180321131425502.json");
+        request1.open("GET", "http://opendata.hccg.gov.tw/dataset/07caf18a-a966-4409-810a-ce3fdb7447b7/resource/3bca2d3b-177c-4e4a-9576-4a3ed8c81612/download/20180307114843661.json");
+        request2.open("GET", "http://opendata.hccg.gov.tw/dataset/4e722575-66a2-4af9-b1ff-95c2469331d1/resource/e17629a6-f7fb-4895-9d91-9d8e37d79eae/download/20180307103221255.json")
+        $(function () {
+
+            var map = new google.maps.Map(
+                document.getElementById('map'), {
+                    center: { lat: 24.7571075, lng: 120.952429 },
+                    zoom: 15
+                });
+
+            directionsDisplay.setMap(map);
+
+            map.addListener("click", function (e) {
+
+                var marker = new google.maps.Marker({
+                    position: e.latLng,
+                    map: map
+                });
+
+                routes.push({
+                    order: routes.length + 1,
+                    lat: e.latLng.lat(),
+                    lng: e.latLng.lng()
+                });
+
+                if (routes.length < 2) return;
+
+                console.log(routes);
+
+                var waypoints = [];
+
+                // create waypoints.
+                for (var route of routes) {
+                    waypoints.push({
+                        location: {
+                            lat: route.lat,
+                            lng: route.lng
+                        },
+                        stopover: true
+                    });
+                }
+
+                var start = {
+                    lat: routes[0].lat,
+                    lng: routes[0].lng
+                };
+                var end = {
+                    lat: routes[routes.length - 1].lat,
+                    lng: routes[routes.length - 1].lng
+                };
+
+                directionsService.route({
+                    origin: start,
+                    destination: end,
+                    waypoints: waypoints,
+                    optimizeWaypoints: true,
+                    travelMode: 'DRIVING'
+                }, function (response, status) {
+                    if (status === 'OK') {
+                        directionsDisplay.setDirections(response);
+                    }
+                });
+
+                console.log(e.latLng.lat());
+                console.log(e.latLng.lng());
+            });
+
+            request.onload = function () {
+
+                var items = JSON.parse(this.responseText);
+                var image = {
+                    url: "http://iconshow.me/media/images/Application/Map-Markers-icons/png/128/MapMarker_PushPin1_Right_Chartreuse.png",
+                    scaledSize: new google.maps.Size(35, 35)
+                };
+                for (var i of items) {
+                    var mark = new google.maps.Marker({
+                        position: { lat: parseFloat(i.緯度), lng: parseFloat(i.經度) },
+                        map: map,
+                        icon: image,
+                        label: '住',
+                        title: i.旅館名稱
+                    });
+                }
+            };
+
+            request1.onload = function () {
+
+                var items = JSON.parse(this.responseText);
+                var image = {
+                    url: "http://files.softicons.com/download/web-icons/vista-map-markers-icons-by-icons-land/png/128x128/MapMarker_Flag2_Left_Azure.png",
+                    scaledSize: new google.maps.Size(35, 35)
+                };
+                for (var i of items) {
+                    var address = i.地址;
+                    if (address === "") {
+                        continue;
+                    }
+                    geocodingAPIRequest.open('GET', 'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=AIzaSyDkNAdpraht6uyD0Wc6-fy96eRntXahUgQ', false);
+                    geocodingAPIRequest.send();
+                    var result = JSON.parse(geocodingAPIRequest.responseText);
+                    if (result.status === "OK") {
+                        /*  console.log(
+                             "address: " + address +
+                             "lat: " + result.results[0].geometry.location.lat +
+                             "lng: " + result.results[0].geometry.location.lng + "<br />"
+                         ); */
+                        var mark = new google.maps.Marker({
+                            position: { lat: result.results[0].geometry.location.lat, lng: result.results[0].geometry.location.lng },
+                            map: map,
+                            icon: image,
+                            label: '景',
+                            title: i.景點名稱
+                        });
+                    }
+                    
+                }
+            };
+            request2.onload = function () {
+
+                var items = JSON.parse(this.responseText);
+                var image = {
+                    url: "https://cdn2.iconfinder.com/data/icons/IconsLandVistaMapMarkersIconsDemo/256/MapMarker_PushPin_Right_Pink.png",
+                    scaledSize: new google.maps.Size(35, 35)
+                };
+                for (var i of items) {
+                    var address = i.地址;
+                    if (address === "") {
+                        continue;
+                    }
+                    geocodingAPIRequest.open('GET', 'https://maps.googleapis.com/maps/api/geocode/json?address=' + address + '&key=AIzaSyDkNAdpraht6uyD0Wc6-fy96eRntXahUgQ', false);
+                    geocodingAPIRequest.send();
+                    var result = JSON.parse(geocodingAPIRequest.responseText);
+                    if (result.status === "OK") {
+                        /*  console.log(
+                             "address: " + address +
+                             "lat: " + result.results[0].geometry.location.lat +
+                             "lng: " + result.results[0].geometry.location.lng + "<br />"
+                         ); */
+                        var mark = new google.maps.Marker({
+                            position: { lat: result.results[0].geometry.location.lat, lng: result.results[0].geometry.location.lng },
+                            map: map,
+                            icon: image,
+                            label: '食',
+                            title: i.店家名稱
+                        });
+                    }
+
+                }
+            };
+        })
+        request.send();
+        request1.send();
+        request2.send();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Guess the number</title>
+    <!-- Required meta tags -->
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <style>
+        body {
+            font-family: "微軟正黑體";
+        }
+
+        .btn-group1 {
+            position: absolute;
+            top: 2%;
+            left: 3%;
+        }
+
+        .btn-group1 button {
+            width: 25em;
+        }
+
+        .input-group {
+            position: absolute;
+            top: 12%;
+            left: 3%;
+        }
+
+        .card {
+            position: absolute;
+            left: 3%;
+            top: 22%;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="btn-group1" role="group" aria-label="Basic example">
+                <button type="button" class="btn btn-white" id="start">開始</button>
+                <button type="button" class="btn btn-white" id="giveup">放棄重來</button>
+                <button type="button" class="btn btn-white" id="answer">看答案</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-group" style="width:94%">
+                <span class="input-group-text" id="basic-addon1">Input</span>
+                <input type="text" class="form-control" placeholder="輸入數字" id="number" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="check">猜數</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <form style="margin-top:120px; width:1200px;">
+                <div class="form-group">
+                    <label for="comment">遊戲歷程:</label>
+                    <textarea class="form-control" rows="5" id="course"></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+        var alladd = '';
+        var answer = [];
+        while (answer.length < 4) {
+            var randomnumber = Math.floor(Math.random() * 10);
+            if (answer.indexOf(randomnumber) > -1) {
+                continue;
+            }
+            answer[answer.length] = randomnumber,
+                alladd += randomnumber
+        }
+        var correct = false;
+        document.getElementById("answer").onclick = function () {
+            var btn = event.srcElement;
+            document.getElementById("course").value += alladd + "\n";
+        }
+        document.getElementById("start").onclick = function () {
+            var btn = event.srcElement;
+            document.getElementById("number").value = "";
+            document.getElementById("course").value = "";
+            document.getElementById("check").disabled = false;
+            document.getElementById("answer").disabled = false;
+            document.getElementById("giveup").disabled = false;
+        }
+        document.getElementById("check").onclick = function () {
+            var btn = event.srcElement;
+            var num = document.getElementById("number").value;
+            var a = num / 1000;
+            var b = (num - (a * 1000)) / 100;
+            var c = (num - (a * 1000 + b * 100)) / 10;
+            var d = (num - (a * 1000 + b * 100 + c * 10));
+            num[a, b, c, d];
+            var A = 0;
+            var B = 0;
+            for (var i = 0; i < 4; i++) {
+                for (var j = 0; j < 4; j++) {
+                    if (num[i] == answer[i] && i == j) {
+                        A++;
+                    }
+                    if (num[i] != answer[i] && num[i] == answer[j]) {
+                        B++;
+                    }
+                }
+            }
+            document.getElementById("course").value += A + "A" + B + "B --->" + document.getElementById("number").value + "\n";
+            if (!parseInt(num)) {
+                document.getElementById("course").value += "...輸入數字..." + "\n";
+            }
+            if (num == answer) {
+                document.getElementById("course").value += "...答對..." + "\n";
+                correct = true;
+            }
+           
+        }
+        document.getElementById("giveup").onclick = function () {
+                var btn = event.srcElement;
+                location.reload();
+            }
+        /*document.getElementById("start").onclick = function () {
+            var arraystart = new Array(4);
+            for (var i = 0; i < 4; i++) {
+                var ans = Math.floor(Math.random() * 10);
+                arraystart[i] = ans;
+
+                if (arraystart[0] == arraystart[1]) {
+                    arraystart[1] = Math.floor(Math.random() * 10);
+                }
+                if (arraystart[0] == arraystart[2] || arraystart[1] == arraystart[2]) {
+                    arraystart[2] = Math.floor(Math.random() * 10);
+                }
+                if (arraystart[0] == arraystart[3] || arraystart[1] == arraystart[3] || arraystart[2] == arraystart[3]) {
+                    arraystart[3] = Math.floor(Math.random() * 10);
+                }
+            }
+            for (var j = 0; j < 4; j++) {
+                document.writeln(arraystart[j]);
+            }
+        }
+        document.getElementById("inputtry").onclick = function (){
+            var trynumber = parseInt(document.getElementById("number").value);
+            alert(trynumber.toString().split("")); 
+        }*/
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,602 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>月曆</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <style>
+        body {
+            font-family: "微軟正黑體";
+        }
+
+        table {
+            border: 1px solid black;
+            border-spacing: 0px;
+            width: 50%;
+            height: 50%
+        }
+
+        td {
+            border: 1px solid black;
+            border-spacing: 0px;
+            width: 10%;
+            height: 100px;
+        }
+
+        th {
+            border: 1px solid black;
+            height: 30px;
+        }
+
+        #tittle {
+            font-size: 1.4em;
+            padding: 4px 0.55em;
+        }
+
+        #tt {
+            border: 0ch;
+        }
+
+        #newevent {
+            background-color: aquamarine;
+        }
+
+        #Added {
+            background-color: darkslateblue;
+        }
+
+        #Close {
+            background-color: indianred;
+        }
+
+        li:hover {
+            background-color: paleturquoise;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <div class="container text-center mt-5">
+        <table class="table border" id="calendar">
+            <thead>
+                <tr id="tt">
+                    <th colspan="2">
+                        <button id="lastM">上個月</button>
+                    </th>
+                    <th colspan="2" id="title">
+
+                    </th>
+                    <th colspan="1">
+                        <button type="button" class="btn btn-Secondary btn-sm" id="newevent" data-toggle="modal" data-target="#exampleModal">新增事項</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">新增事項</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body" style="text-align:left;">
+                                        <div class="mt-1">
+                                            <span>內　容：</span>
+                                            <!-- <textarea type="text" style="width:200px;" id="contant" rows="3"></textarea> -->
+                                            <input type="text" style="width:300px;" id="content">
+                                        </div>
+                                        <div class="mt-2">
+                                            <span>日　期：</span>
+                                            <input type="date" style="width:300px;" id="date">
+                                        </div>
+                                        <div class="mt-2">
+                                            <span>起　始：</span>
+                                            <input type="time" style="width:150px;" id="timestart">
+                                        </div>
+                                        <div class="mt-2">
+                                            <span>終　止：</span>
+                                            <input type="time" style="width:150px;" id="timeend">
+                                        </div>
+                                        <div class="mt-2">
+                                            <span>顏　色：</span>
+                                            <input type="color" value="#E9E6FF" style="width:50px;" id="color">
+                                        </div>
+                                        <div class="mt-2">
+                                            <span>地　址：</span>
+                                            <input type="text" style="width:300px;" id="address">
+                                            <button type="button" class="btn btn-secondary" id="serch">搜尋</button>
+                                        </div>
+                                    </div>
+                                    <div id="map" style="width: 490px; height: 400px"></div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" id="Added">新增</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">取消</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </th>
+                    <th colspan="2">
+                        <button id="nextM">下個月</button>
+                    </th>
+                </tr>
+                <tr>
+                    <th style="color:red;">SUN</th>
+                    <th>MON</th>
+                    <th>TUE</th>
+                    <th>WED</th>
+                    <th>THU</th>
+                    <th>FRI</th>
+                    <th style="color:red;">SAT</th>
+                </tr>
+            </thead>
+            <tbody id="addCalender">
+                </tobody>
+        </table>
+    </div>
+    <div class="modal fade" id="revise" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">新增事項</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" style="text-align:left;">
+                    <div class="mt-1">
+                        <span>內　容：</span>
+                        <!-- <textarea type="text" style="width:200px;" id="contant" rows="3"></textarea> -->
+                        <input type="text" style="width:300px;" id="revise_content">
+                    </div>
+                    <div class="mt-2">
+                        <span>日　期：</span>
+                        <input type="date" style="width:300px;" id="revise_date">
+                    </div>
+                    <div class="mt-2">
+                        <span>起　始：</span>
+                        <input type="time" style="width:150px;" id="revise_timestart">
+                    </div>
+                    <div class="mt-2">
+                        <span>終　止：</span>
+                        <input type="time" style="width:150px;" id="revise_timeend">
+                    </div>
+                    <div class="mt-2">
+                        <span>顏　色：</span>
+                        <input type="color" value="#E9E6FF" style="width:50px;" id="revise_color">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="revise_Added">修改</button>
+                    <button type="button" class="btn btn-primary" id="Delete" data-dismiss="modal">刪除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYr-pVf6Frs9ZXOhNSFJYzR3j8jrxXfjU"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script>
+
+        var map;
+        var marker = null;
+        var center = { lat: 24.7571075, lng: 120.952429 };
+        var routes = [];
+        var directionsService = new google.maps.DirectionsService;
+        var directionsDisplay = new google.maps.DirectionsRenderer;
+        directionsDisplay.setMap(map);
+
+        $(function () {
+
+            map = new google.maps.Map(
+                document.getElementById('map'), {
+                    center: center,
+                    zoom: 13
+                });
+
+            $("#serch").click(function () {
+                geocoder = new google.maps.Geocoder();
+                var address = $("#address").val();
+                var image = {
+                    url: "https://cdn2.iconfinder.com/data/icons/IconsLandVistaMapMarkersIconsDemo/256/MapMarker_PushPin_Right_Pink.png",
+                    scaledSize: new google.maps.Size(35, 35)
+                };
+                geocoder.geocode({ 'address': address }, function (results, status) {
+                    map.setCenter(results[0].geometry.location);
+                    if (marker != null) {
+                        marker.setMap(null);
+                        marker = null;
+                    }
+                    marker = new google.maps.Marker({
+                        position: results[0].geometry.location,
+                        map: map,
+                        icon: image
+                    });
+                });
+            })
+            var today = new Date();//取今日時間
+            today.setDate(1);//setDate設定成幾號
+            var colornumber = today.getMonth();
+            while (today.getDay() != 0) {//getDay取得星期幾
+                today.setDate(today.getDate() - 1);
+            }
+            var $table = $("#addCalender");
+            for (var i = 0; i < 6; i++) {
+                var row = $("<tr></tr>");
+                for (var j = 0; j < 7; j++) {
+                    var cell = $("<td></td>");
+                    console.log(today.getDate());//getDate取得幾號
+                    cell.text(today.getDate());
+                    if (today.getMonth() != colornumber) {
+                        $(cell).css("color", "gray");
+                    }
+
+                    var Dayofnew =
+                        today.getFullYear() + "-" +
+                        ((today.getMonth() + 1 > 9) ? today.getMonth() + 1 : "0" + (today.getMonth() + 1)) + "-" +
+                        ((today.getDate() > 9) ? today.getDate() : "0" + (today.getDate()));
+                    //console.log(Dayofnew)
+                    if (localStorage.getItem(Dayofnew) != null) {
+                        var ul = $("<ul></ul>");
+                        $(ul).css("list-style-type", "none")
+                            .css("padding", "0px")
+                            .css("margin", "0px");
+                        var database = JSON.parse(localStorage.getItem(Dayofnew)).schedules;
+                        console.log(database);
+                        var time = 0;
+                        for (var item of database) {
+                            var li = $("<li></li>");
+                            li.text(item.starttime + " " + item.subject);
+                            $(li).css("color", item.colorin)
+                                .attr("data-toggle", "modal")
+                                .attr("data-target", "#revise")
+                                .attr("id", Dayofnew + "," + time)
+                                .click(function () {
+                                    var idarray = this.id.split(",");
+                                    //console.log(idarray);
+                                    var OldDay = JSON.parse(localStorage.getItem(idarray[0]));
+                                    $("#revise_content").val(OldDay.schedules[idarray[1]].subject);
+                                    $("#revise_date").val(OldDay.key);
+                                    $("#revise_timestart").val(OldDay.schedules[idarray[1]].starttime);
+                                    $("#revise_timeend").val(OldDay.schedules[idarray[1]].endtime);
+                                    $("#revise_color").val(OldDay.schedules[idarray[1]].colorin);
+                                    $("#revise_Added").val(this.id);
+                                    $("#Delete").val(this.id);
+                                    $("#revise_Added").click(function () {
+                                        var idarray = this.value.split(",");
+                                        console.log(idarray);
+                                        var OldDay = JSON.parse(localStorage.getItem(idarray[0])).schedules;
+                                        console.log(OldDay);
+                                        var array = OldDay;
+
+                                        var schedule = {
+                                            subject: $("#revise_content").val(),
+                                            starttime: $("#revise_timestart").val(),
+                                            endtime: $("#revise_timeend").val(),
+                                            colorin: $("#revise_color").val()
+                                        }
+                                        console.log(schedule);
+                                        array[idarray[1]] = schedule;
+
+                                        console.log(array);
+                                        var monthofday = {
+                                            key: $("#revise_date").val(),
+                                            schedules: array
+                                        };
+                                        var NewDay = JSON.stringify(monthofday);
+                                        localStorage.setItem($("#revise_date").val(), NewDay);
+                                        window.location.reload();
+
+                                    })
+                                    $("#Delete").click(function () {
+                                        var idarray = this.value.split(",");
+                                        console.log(idarray);
+                                        var OldDay = JSON.parse(localStorage.getItem(idarray[0])).schedules;
+                                        console.log(OldDay);
+                                        var array = OldDay;
+
+                                        console.log(array);
+                                        array.splice(idarray[1], 1);
+                                        console.log(array);
+                                        var monthofday = {
+                                            key: $("#revise_date").val(),
+                                            schedules: array
+                                        };
+                                        var NewDay = JSON.stringify(monthofday);
+                                        localStorage.setItem($("#revise_date").val(), NewDay);
+                                        window.location.reload();
+                                    })
+                                });
+                            time++;
+                            li.appendTo(ul);
+                        }
+                        ul.appendTo(cell);
+                    }
+
+                    today.setDate(today.getDate() + 1);
+
+                    cell.appendTo(row);
+                }
+                row.appendTo($table);
+            }
+
+            if (today.getMonth() != 0) {
+                $("#title").text(today.getFullYear() + " 年 " + today.getMonth() + " 月 ");
+            }
+            else if (today.getMonth() == 0) {
+                $("#title").text(today.getFullYear() - 1 + " 年 " + " 12 " + " 月 ");
+            }
+
+
+            $("#lastM").click(function () {
+
+                today.setMonth(today.getMonth() - 2); //扣除後面的1,2,3...的月份，加上扣掉當月份 ==>所以總共扣2
+                var colornumber = today.getMonth();
+                today.setDate(1);
+                while (today.getDay() != 0) {//getDay取得星期幾
+                    today.setDate(today.getDate() - 1);
+                }
+                $("#addCalender").text("");
+                for (var i = 0; i < 6; i++) {
+                    var row = $("<tr></tr>");
+                    for (var j = 0; j < 7; j++) {
+                        var cell = $("<td></td>");
+                        console.log(today.getDate());//getDate取得幾號
+                        cell.text(today.getDate());
+                        if (today.getMonth() != colornumber) {
+                            $(cell).css("color", "gray");
+                        }
+                        var Dayofnew =
+                            today.getFullYear() + "-" +
+                            ((today.getMonth() + 1 > 9) ? today.getMonth() + 1 : "0" + (today.getMonth() + 1)) + "-" +
+                            ((today.getDate() > 9) ? today.getDate() : "0" + (today.getDate()));
+                        //console.log(Dayofnew)
+                        if (localStorage.getItem(Dayofnew) != null) {
+                            var ul = $("<ul></ul>");
+                            $(ul).css("list-style-type", "none")
+                                .css("padding", "0px")
+                                .css("margin", "0px");
+                            var database = JSON.parse(localStorage.getItem(Dayofnew)).schedules;
+                            console.log(database);
+                            var time = 0;
+                            for (var item of database) {
+                                var li = $("<li></li>");
+                                li.text(item.starttime + " " + item.subject);
+                                $(li).css("color", item.colorin)
+                                    .attr("data-toggle", "modal")
+                                    .attr("data-target", "#revise")
+                                    .attr("id", Dayofnew + "," + time)
+                                    .click(function () {
+                                        var idarray = this.id.split(",");
+                                        //console.log(idarray);
+                                        var OldDay = JSON.parse(localStorage.getItem(idarray[0]));
+                                        $("#revise_content").val(OldDay.schedules[idarray[1]].subject);
+                                        $("#revise_date").val(OldDay.key);
+                                        $("#revise_timestart").val(OldDay.schedules[idarray[1]].starttime);
+                                        $("#revise_timeend").val(OldDay.schedules[idarray[1]].endtime);
+                                        $("#revise_color").val(OldDay.schedules[idarray[1]].colorin);
+                                        $("#revise_Added").val(this.id);
+                                        $("#Delete").val(this.id);
+                                        $("#revise_Added").click(function () {
+                                            var idarray = this.value.split(",");
+                                            console.log(idarray);
+                                            var OldDay = JSON.parse(localStorage.getItem(idarray[0])).schedules;
+                                            console.log(OldDay);
+                                            var array = OldDay;
+
+                                            var schedule = {
+                                                subject: $("#revise_content").val(),
+                                                starttime: $("#revise_timestart").val(),
+                                                endtime: $("#revise_timeend").val(),
+                                                colorin: $("#revise_color").val()
+                                            }
+                                            console.log(schedule);
+                                            array[idarray[1]] = schedule;
+
+                                            console.log(array);
+                                            var monthofday = {
+                                                key: $("#revise_date").val(),
+                                                schedules: array
+                                            };
+                                            var NewDay = JSON.stringify(monthofday);
+                                            localStorage.setItem($("#revise_date").val(), NewDay);
+                                            window.location.reload();
+
+                                        })
+                                        $("#Delete").click(function () {
+                                            var idarray = this.value.split(",");
+                                            console.log(idarray);
+                                            var OldDay = JSON.parse(localStorage.getItem(idarray[0])).schedules;
+                                            console.log(OldDay);
+                                            var array = OldDay;
+
+                                            console.log(array);
+                                            array.splice(idarray[1], 1);
+                                            console.log(array);
+                                            var monthofday = {
+                                                key: $("#revise_date").val(),
+                                                schedules: array
+                                            };
+                                            var NewDay = JSON.stringify(monthofday);
+                                            localStorage.setItem($("#revise_date").val(), NewDay);
+                                            window.location.reload();
+                                        })
+                                    });
+                                time++;
+                                li.appendTo(ul);
+                            }
+                            ul.appendTo(cell);
+                        }
+                        today.setDate(today.getDate() + 1);
+
+                        cell.appendTo(row);
+                    }
+                    row.appendTo($table);
+                }
+                if (today.getMonth() != 0) {
+                    $("#title").text(today.getFullYear() + " 年 " + today.getMonth() + " 月 ");
+                }
+                else {
+                    $("#title").text(today.getFullYear() - 1 + " 年 " + " 12 " + " 月 ");
+                }
+            })
+
+            $("#nextM").click(function () {
+
+                var colornumber = today.getMonth();
+                today.setDate(1);
+                while (today.getDay() != 0) {//getDay取得星期幾
+                    today.setDate(today.getDate() - 1);
+                }
+                $("#addCalender").text("");
+                for (var i = 0; i < 6; i++) {
+                    var row = $("<tr></tr>");
+                    for (var j = 0; j < 7; j++) {
+                        var cell = $("<td></td>");
+                        console.log(today.getDate());//getDate取得幾號
+                        cell.text(today.getDate());
+                        if (today.getMonth() != colornumber) {
+                            $(cell).css("color", "gray");
+                        }
+                        var Dayofnew =
+                            today.getFullYear() + "-" +
+                            ((today.getMonth() + 1 > 9) ? today.getMonth() + 1 : "0" + (today.getMonth() + 1)) + "-" +
+                            ((today.getDate() > 9) ? today.getDate() : "0" + (today.getDate()));
+                        //console.log(Dayofnew)
+                        if (localStorage.getItem(Dayofnew) != null) {
+                            var ul = $("<ul></ul>");
+                            $(ul).css("list-style-type", "none")
+                                .css("padding", "0px")
+                                .css("margin", "0px");
+                            var database = JSON.parse(localStorage.getItem(Dayofnew)).schedules;
+                            console.log(database);
+                            var time = 0;
+                            for (var item of database) {
+                                var li = $("<li></li>");
+                                li.text(item.starttime + " " + item.subject);
+                                $(li).css("color", item.colorin)
+                                    .attr("data-toggle", "modal")
+                                    .attr("data-target", "#revise")
+                                    .attr("id", Dayofnew + "," + time)
+                                    .click(function () {
+                                        var idarray = this.id.split(",");
+                                        //console.log(idarray);
+                                        var OldDay = JSON.parse(localStorage.getItem(idarray[0]));
+                                        $("#revise_content").val(OldDay.schedules[idarray[1]].subject);
+                                        $("#revise_date").val(OldDay.key);
+                                        $("#revise_timestart").val(OldDay.schedules[idarray[1]].starttime);
+                                        $("#revise_timeend").val(OldDay.schedules[idarray[1]].endtime);
+                                        $("#revise_color").val(OldDay.schedules[idarray[1]].colorin);
+                                        $("#revise_Added").val(this.id);
+                                        $("#Delete").val(this.id);
+                                        $("#revise_Added").click(function () {
+                                            var idarray = this.value.split(",");
+                                            console.log(idarray);
+                                            var OldDay = JSON.parse(localStorage.getItem(idarray[0])).schedules;
+                                            console.log(OldDay);
+                                            var array = OldDay;
+
+                                            var schedule = {
+                                                subject: $("#revise_content").val(),
+                                                starttime: $("#revise_timestart").val(),
+                                                endtime: $("#revise_timeend").val(),
+                                                colorin: $("#revise_color").val()
+                                            }
+                                            console.log(schedule);
+                                            array[idarray[1]] = schedule;
+
+                                            console.log(array);
+                                            var monthofday = {
+                                                key: $("#revise_date").val(),
+                                                schedules: array
+                                            };
+                                            var NewDay = JSON.stringify(monthofday);
+                                            localStorage.setItem($("#revise_date").val(), NewDay);
+                                            window.location.reload();
+
+                                        })
+                                        $("#Delete").click(function () {
+                                            var idarray = this.value.split(",");
+                                            console.log(idarray);
+                                            var OldDay = JSON.parse(localStorage.getItem(idarray[0])).schedules;
+                                            console.log(OldDay);
+                                            var array = OldDay;
+
+                                            console.log(array);
+                                            array.splice(idarray[1], 1);
+                                            console.log(array);
+                                            var monthofday = {
+                                                key: $("#revise_date").val(),
+                                                schedules: array
+                                            };
+                                            var NewDay = JSON.stringify(monthofday);
+                                            localStorage.setItem($("#revise_date").val(), NewDay);
+                                            window.location.reload();
+                                        })
+                                    });
+                                time++;
+                                li.appendTo(ul);
+                            }
+                            ul.appendTo(cell);
+                        }
+                        today.setDate(today.getDate() + 1);
+
+                        cell.appendTo(row);
+                    }
+                    row.appendTo($table);
+                }
+                if (today.getMonth() != 0) {
+                    $("#title").text(today.getFullYear() + " 年 " + today.getMonth() + " 月 ");
+                }
+                else {
+                    $("#title").text(today.getFullYear() - 1 + " 年 " + " 12 " + " 月 ");
+                }
+            })
+
+            $("#Added").click(function () {
+                var monthofday = {
+                    key: $("#date").val(),
+                    schedules: []
+                };
+                var schedule = {
+                    subject: $("#content").val(),
+                    starttime: $("#timestart").val(),
+                    endtime: $("#timeend").val(),
+                    colorin: $("#color").val()
+                }
+                if (localStorage.getItem($("#date").val()) != null) {
+                    var OldDay = JSON.parse(localStorage.getItem($("#date").val())); //把原本在localStorage的字串取出轉成物件
+                    OldDay.schedules.push(schedule); //把新增的資料放到原本有資料的localStorage裡面
+                    var NewDay = JSON.stringify(OldDay);
+                    localStorage.setItem($("#date").val(), NewDay);
+                }
+                else { //行事曆裡沒有資料時
+                    monthofday.schedules.push(schedule); //把新增資料存到陣列
+                    var NewDay = JSON.stringify(monthofday); //把存入的資料(物件)轉成字串
+                    /* console.log(monthofday); */
+                    localStorage.setItem($("#date").val(), NewDay);//把字串存到localStorage
+                }
+                window.location.reload();
+            })
+        })
+
+
+
+
+    </script>
+</body>
+
+</html>
